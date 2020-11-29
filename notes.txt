@@ -1,0 +1,66 @@
+- routing is determine how the application will respond to determined requests
+- uses Object.assign to avoid Object mutation
+- writefile command reloads the server - this is valid at least for nodemon
+- request libs aways return exception when the result is not 200
+- middleware
+    - request-response cycle
+    - receive the request and execute many middlewares (running next)
+    - the last step is send a response
+    - middlewares are functions executed in the process
+    - the set of middlewares execute in an application are colled middleware stack
+        - can be functions to parse the body, logging, set headers and do router
+        - exemple: express.json()
+    - the middlewares order as defined in the code 
+        - example: if we create an middleware after a router handler definition X,
+        if we call X than the middleware is not called, because the route handler 
+        calls end() before the middleware execution (in other words, the cycle is already finished)
+        - a middleware defined for an router works only with the defined router routes
+- mongodb
+    - nosql database
+    - a database has collections - equivalent to tables
+    - a collection has documents - equivalent to rows
+        - mongodb is document based - store data in documents
+    - no data schema is required - more flexible
+    - uses a format bson to represent the date, that is basic the same json but with types
+    - to quicker access we can embeed/denormalize data including all related data into the same document 
+    - commands
+        - use db-name - create and switch to a specified db
+        - show dbs - to show existent databases
+        - db - is the current database
+        - db.collection_name.insertOne(document) - to insert one register
+        - db.collection_name.find()
+        - db.collection_name.insertOne(array_of_documents) - to insert many registers
+        - db.collection_name.updateOne(query, { $set: { ... } })
+        - db.collection_name.updateMany(query, { $set: { ... } })
+        - db.collection_name.deleteOne(query, { $set: { ... } })
+        - db.collection_name.deleteMany(query, { $set: { ... } })
+        - operator are connect by default with OR operation
+        - operator
+            - lte - less than or equal
+            - lt - less than
+            - gte - greater than or equal
+            - or = $or: [ { field: value }, { ... }, ... ] - or accepts an array of conditions
+    - mongoose is an object data modeling - ODM
+        - accelarate development of mongodb interactions
+        - features: schemas to model data and relationships, easy datavalidation, simple query API, middlewares, etc
+        - mongoose model: a wrapper for the schema providing an interface to the database for CRUD operations             
+- mvc
+    - can be implemented in different ways
+
+    - model-view-controller
+    - model
+        - application data
+        - business logic    
+            - solves business problems - is related with business rules
+    - controller
+        - application logic (not underlying business problem)
+            - concerned about managing requests and responses
+        - interact with model
+        - send and response client requests
+        - bridge between model and view
+        - routers routes to controllers
+    - view
+        - presentation logic
+        - the controller select thew view if necessary
+
+    - fato models/ thin controllers - keep controllers simple moving as much logic as possible to the model
