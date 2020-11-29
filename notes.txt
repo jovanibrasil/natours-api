@@ -43,7 +43,9 @@
     - mongoose is an object data modeling - ODM
         - accelarate development of mongodb interactions
         - features: schemas to model data and relationships, easy datavalidation, simple query API, middlewares, etc
-        - mongoose model: a wrapper for the schema providing an interface to the database for CRUD operations             
+        - mongoose model: a wrapper for the schema providing an interface to the database for CRUD operations           
+    - aggregation
+        - is a pipeline with many stages
 - mvc
     - can be implemented in different ways
 
@@ -64,3 +66,6 @@
         - the controller select thew view if necessary
 
     - fato models/ thin controllers - keep controllers simple moving as much logic as possible to the model
+- in some cases we need to use function notation to create functions, instead the arrow function notation, 
+because using function notation we have a this (context) and using arrow function we do not have
+- virtual properties

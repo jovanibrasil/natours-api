@@ -142,3 +142,101 @@ exports.createTour = async (req, res) => {
     });
   }
 };
+
+exports.getTourStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: { ratingsAverage: { $gte: 4.5 } },
+      },
+      // group using accumulators
+      {
+        $group: {
+          //_id: null, // is null because I have one group only
+          _id: '$difficulty',
+          // define new fields and how they will be calculated
+          numTours: { $sum: 1 },
+          avgRating: { $avg: '$ratingsAverage' },
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+          numRatings: { $sum: '$ratingsQuantity' },
+        },
+      },
+      {
+        $sort: {
+          avgPrice: 1,
+        },
+      },
+      {
+        $match: { _id: { $ne: 'easy' } },
+      },
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour: stats,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'something bad happened',
+    });
+  }
+};
+
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+    const plan = await Tour.aggregate([
+      {
+        // deconstructs the tour array, create a tour by each date from startDates
+        $unwind: '$startDates',
+      },
+      {
+        // select tours that happens in the informed year
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$startDates' },
+          numToursStarts: { $sum: 1 },
+          tours: { $push: '$name' },
+        },
+      },
+      {
+        $addFields: {
+          month: '$_id',
+        },
+      },
+      {
+        $project: {
+          __id: 0,
+        },
+      },
+      {
+        $sort: {
+          numToursStarts: -1,
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour: plan,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'something bad happened',
+    });
+  }
+};
