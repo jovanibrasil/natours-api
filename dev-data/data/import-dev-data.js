@@ -2,19 +2,15 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const dotenv = require('dotenv');
 
-const Tour = require('../../models/tourModel');
+const Tour = require('../../src/models/tourModel');
 
 dotenv.config({
   path: './config.env',
 });
 
-const DB_CONNECTION_STRING = process.env.DATA_BASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD
-);
 mongoose
   //.connect(process.env.DATA_BASE_LOCAL, {
-  .connect(DB_CONNECTION_STRING, {
+  .connect(process.env.DB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

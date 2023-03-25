@@ -6,8 +6,8 @@
   "scripts": {
     "start:dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "dev-env-up": "docker-compose up -d --build",
-    "dev-env-down": "docker-compose down",
+    "dev-env-up": "docker compose up -d --build",
+    "dev-env-down": "docker compose down",
     "mongo-bash": "docker container exec -i -t --user root mongo bash"
   },
   "engines": {
@@ -32,6 +32,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
+    "nodemon": "^2.0.22",
     "prettier": "^2.2.0"
   }
 }

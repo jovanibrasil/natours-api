@@ -1,7 +1,7 @@
 // const fs = require('fs');
 const Tour = require('../models/tourModel');
 // const { v4: uuidv4 } = require('uuid');
-const APIFeatures = require('../utils/apiFeatures');
+const APIFeatures = require('../../utils/apiFeatures');
 
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
