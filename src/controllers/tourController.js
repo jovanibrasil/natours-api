@@ -1,11 +1,5 @@
-// const fs = require('fs');
 const Tour = require('../models/tourModel');
-// const { v4: uuidv4 } = require('uuid');
 const APIFeatures = require('../../utils/apiFeatures');
-
-// const tours = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-// );
 
 // exports.checkSomething = (req, res, next, val) => {
 //   console.log(`Tour id is: ${val}`);
@@ -51,7 +45,7 @@ exports.getTours = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      status: 'error',
+      status: 'fail',
       message: 'Something bad happened!',
     });
   }
@@ -91,7 +85,7 @@ exports.patchTour = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      status: 'error',
+      status: 'fail',
       message: 'Something bad happened!',
     });
   }
@@ -103,29 +97,13 @@ exports.deleteTour = (req, res) => {
     res.status(204).send();
   } catch (error) {
     res.status(500).json({
-      status: 'error',
-      message: 'Sothing bad happened!',
+      status: 'fail',
+      message: error,
     });
   }
 };
 
 exports.createTour = async (req, res) => {
-  //let toudId = uuidv4();
-  //const newTour = Object.assign({ id: toudId }, req.body);
-  //tours.push(newTour);
-  // fs.writeFile(
-  //   `${__dirname}/dev-data/data/tours-simple.json`,
-  //   JSON.stringify(tours),
-  //   (err) => {
-  //     res.status(201).json({
-  //       status: 'success',
-  //       data: {
-  //         tour: newTour,
-  //       },
-  //     });
-  //   }
-  // );
-
   try {
     const newTour = await Tour.create(req.body);
 
@@ -137,8 +115,8 @@ exports.createTour = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      status: 'error',
-      message: 'Sothing bad happened!',
+      status: 'fail',
+      message: error,
     });
   }
 };
@@ -181,8 +159,8 @@ exports.getTourStats = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: 'error',
-      message: 'something bad happened',
+      status: 'fail',
+      message: error,
     });
   }
 };
@@ -235,8 +213,8 @@ exports.getMonthlyPlan = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: 'error',
-      message: 'something bad happened',
+      status: 'fail',
+      message: error,
     });
   }
 };

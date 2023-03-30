@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "start:dev": "nodemon index.js",
+    "start:prod": "NODE_ENV=production nodemon index.js",
     "dev-env-up": "docker compose up -d --build",
     "dev-env-down": "docker compose down",
     "mongo-bash": "docker container exec -i -t --user root mongo bash"
@@ -21,7 +21,8 @@
     "mongoose": "^5.10.15",
     "morgan": "^1.10.0",
     "slugify": "^1.4.6",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "validator": "^13.9.0"
   },
   "devDependencies": {
     "eslint": "^7.14.0",

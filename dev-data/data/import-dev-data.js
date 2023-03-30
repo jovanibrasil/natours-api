@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const Tour = require('../../src/models/tourModel');
 
 dotenv.config({
-  path: './config.env',
+  path: './.env',
 });
 
 mongoose
