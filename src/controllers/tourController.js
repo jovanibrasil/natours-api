@@ -52,9 +52,7 @@ exports.getTours = async (req, res) => {
 };
 
 exports.getTour = async (req, res) => {
-  //const tour = tours.find((el) => req.params.id === el.id);
-  //const tour = Tour.findById({ id: req.params.id });
-  const tour = await Tour.findOne({ _id: req.params.id });
+  const tour = await Tour.findById({ _id: req.params.id });
   if (!tour) {
     return res.status(404).json({
       status: 'not-found',
