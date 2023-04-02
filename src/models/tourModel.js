@@ -11,7 +11,10 @@ const tourSchema = mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour name must have less or equal then 40 chars'],
       minLength: [10, 'A tour name must have more or equal then 10 chars'],
-      validate: [validator.isAlpha, 'Tour name must only contain characters'],
+      validate: {
+        validator: (val) => validator.isAlpha(val, ['pt-BR'], { ignore: ' -' }),
+        message: 'Tour name must only contain characters',
+      },
     },
     duration: {
       type: Number,
@@ -26,7 +29,7 @@ const tourSchema = mongoose.Schema(
       required: [true, 'A tour must have a difficulty'],
       trim: true,
       enum: {
-        values: ['easy, medium', 'difficult'],
+        values: ['easy', 'medium', 'difficult'],
         message: 'Difficulty is either: easy, medium or difficult',
       },
     },
