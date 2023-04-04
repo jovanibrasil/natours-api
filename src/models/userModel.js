@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const { Date } = require('mongoose');
 
 const userSchema = mongoose.Schema({
   name: {
@@ -33,6 +34,7 @@ const userSchema = mongoose.Schema({
       },
     },
   },
+  passwordChangedAt: Date,
 });
 
 userSchema.pre('save', function (next) {
@@ -49,6 +51,19 @@ userSchema.methods.correctPassword = function (
   userPassword
 ) {
   return bcrypt.compareSync(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return jwtTimeStamp < changedTimeStamp;
+  }
+
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);
