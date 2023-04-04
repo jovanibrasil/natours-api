@@ -2,8 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const tourController = require('../controllers/tourController');
-
-//router.param('id', tourController.checkSomething);
+const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
 
 router
   .route('/top-5-cheap')
@@ -15,13 +14,12 @@ router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 router
   .route('/')
   .get(tourController.getTours)
-  //.post(tourController.checkbody, tourController.createTour);
-  .post(tourController.createTour);
+  .post(jwtValidationMiddleware, tourController.createTour);
 
 router
   .route('/:id')
   .get(tourController.getTour)
-  .patch(tourController.patchTour)
-  .delete(tourController.deleteTour);
+  .patch(jwtValidationMiddleware, tourController.patchTour)
+  .delete(jwtValidationMiddleware, tourController.deleteTour);
 
 module.exports = router;
