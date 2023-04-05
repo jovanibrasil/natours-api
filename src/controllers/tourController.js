@@ -56,7 +56,7 @@ exports.patchTour = catchAsync(async (req, res) => {
 });
 
 exports.deleteTour = catchAsync(async (req, res) => {
-  Tour.findByIdAndDelete(req.params.id);
+  await Tour.findByIdAndDelete(req.params.id);
   res.status(204).send();
 });
 

@@ -18,6 +18,11 @@ const userSchema = mongoose.Schema({
     unique: [true, 'Already already exists user with this email'],
     lowercase: true,
   },
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   photo: String,
   password: {
     type: String,

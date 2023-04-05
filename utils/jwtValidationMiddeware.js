@@ -36,6 +36,6 @@ module.exports = async (req, res, next) => {
   if (currentUser.changedPasswordAfter(decodedToken.iat))
     return next(new AppError('The user changed the password, please login again!', 401, false));
 
-  req.use = currentUser;
+  req.user = currentUser;
   next();
 };

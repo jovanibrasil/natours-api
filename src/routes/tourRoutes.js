@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const tourController = require('../controllers/tourController');
 const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
+const authorizationMiddleware = require('../../utils/authorizationMiddleware');
 
 router
   .route('/top-5-cheap')
@@ -20,6 +21,10 @@ router
   .route('/:id')
   .get(tourController.getTour)
   .patch(jwtValidationMiddleware, tourController.patchTour)
-  .delete(jwtValidationMiddleware, tourController.deleteTour);
+  .delete(
+    jwtValidationMiddleware,
+    authorizationMiddleware('admin'),
+    tourController.deleteTour
+  );
 
 module.exports = router;
