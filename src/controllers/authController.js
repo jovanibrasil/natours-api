@@ -118,3 +118,19 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     token,
   });
 });
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  req.user.password = req.body.password;
+  req.user.passwordConfirm = req.body.passwordConfirm;
+
+  await req.user.save();
+
+  const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  res.status(201).json({
+    status: 'success',
+    token,
+  });
+});
