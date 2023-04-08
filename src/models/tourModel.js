@@ -41,7 +41,6 @@ const tourSchema = mongoose.Schema(
       type: Number,
       default: 0,
       min: [1, 'Rating must be above 1.0'],
-      max: [5, 'Rating must be bellow 5.0'],
     },
     price: {
       type: Number,
@@ -82,6 +81,29 @@ const tourSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
