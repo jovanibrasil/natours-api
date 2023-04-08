@@ -1,4 +1,6 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const app = express();
 const morgan = require('morgan');
@@ -9,9 +11,23 @@ const authRoutes = require('./routes/authRoutes');
 const errorHandlerMiddleware = require('../utils/errorHandleMiddleware');
 const AppError = require('../utils/AppError');
 
-app.use(express.json());
-app.use(express.static(`${process.cwd()}/public`));
+const limiter = rateLimit({
+  max: 3,
+  windowMs: 60 * 60 * 1000,
+  message: 'To many requests from this IP, please try again in an hour',
+});
+
+app.use(helmet());
+app.use('/api', limiter);
+
 app.use(morgan());
+
+app.use(
+  express.json({
+    limit: '10kb',
+  })
+);
+app.use(express.static(`${process.cwd()}/public`));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/tours', tourRoutes);
