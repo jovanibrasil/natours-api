@@ -5,6 +5,31 @@ const catchAsync = require('../../utils/catchAsync');
 const AppError = require('../../utils/AppError');
 const sendEmail = require('../../utils/email');
 
+function generateUserJwtToken(user) {
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+}
+
+function sendSuccessResponse({ token, data, res }) {
+  if (token) {
+    const cookieOptions = {
+      expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRATION_IN_MS),
+      httpOnly: true,
+    };
+
+    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+    res.cookie('jwt', token, cookieOptions);
+  }
+
+  res.status(201).json({
+    status: 'success',
+    token,
+    data,
+  });
+}
+
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm, role } = req.body;
   const newUser = await User.create({
@@ -15,17 +40,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     role,
   });
 
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = generateUserJwtToken(newUser);
 
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  sendSuccessResponse({ token, data: { newUser }, res });
 });
 
 exports.signin = catchAsync(async (req, res, next) => {
@@ -39,14 +56,9 @@ exports.signin = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password)))
     throw new AppError('Incorrect email or password', 401);
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = generateUserJwtToken(user);
 
-  res.status(201).json({
-    status: 'success',
-    token,
-  });
+  sendSuccessResponse({ token, res });
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
@@ -109,14 +121,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   await user.save();
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = generateUserJwtToken(user);
 
-  res.status(201).json({
-    status: 'success',
-    token,
-  });
+  sendSuccessResponse({ token, res });
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -125,9 +132,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   await req.user.save();
 
-  const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = generateUserJwtToken(req.user);
 
   res.status(201).json({
     status: 'success',
