@@ -11,6 +11,7 @@ const morgan = require('morgan');
 const userRoutes = require('./routes/userRoutes');
 const tourRoutes = require('./routes/tourRoutes');
 const authRoutes = require('./routes/authRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 const errorHandlerMiddleware = require('../utils/errorHandleMiddleware');
 const AppError = require('../utils/AppError');
 
@@ -51,6 +52,7 @@ app.use(express.static(`${process.cwd()}/public`));
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 
 app.all('*', (req, res, next) => {
   throw new AppError(
