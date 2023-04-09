@@ -104,6 +104,12 @@ const tourSchema = mongoose.Schema(
         day: Number,
       },
     ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -130,6 +136,14 @@ tourSchema.virtual('durationWeeks').get(function () {
 // aggregation middleware to not allow secret tour via aggregate
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt -isDeleted',
+  });
   next();
 });
 

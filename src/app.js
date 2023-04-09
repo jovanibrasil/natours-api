@@ -15,7 +15,7 @@ const errorHandlerMiddleware = require('../utils/errorHandleMiddleware');
 const AppError = require('../utils/AppError');
 
 const limiter = rateLimit({
-  max: 3,
+  max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'To many requests from this IP, please try again in an hour',
 });
