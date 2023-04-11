@@ -1,7 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const AppError = require('./AppError');
-const User = require('../src/models/userModel')
+const User = require('../src/models/userModel');
 
 module.exports = async (req, res, next) => {
   let token;
