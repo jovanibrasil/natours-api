@@ -29,11 +29,15 @@ exports.patchUser = catchAsync(async (req, res, next) => {
 
   if (password || passwordConfirm)
     return next(new AppError('This route is not for password updates.', 400));
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    { name },
-    { new: true, runValidators: true }
-  );
+
+  const updateUser = { name };
+
+  if (req.file) updateUser.photo = req.file.filename;
+
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, updateUser, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     status: 'success',

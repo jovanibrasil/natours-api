@@ -5,27 +5,22 @@ const userController = require('../controllers/userController');
 const reviewController = require('../controllers/reviewController');
 const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
 const authorizationMiddleware = require('../../utils/authorizationMiddleware');
+const imageMiddleware = require('../../utils/userImageMiddleware');
+
+router.use(jwtValidationMiddleware);
 
 router
   .route('/:id')
   .get(userController.getUser)
   .patch(
-    jwtValidationMiddleware,
     authorizationMiddleware('user'),
+    imageMiddleware,
     userController.patchUser
   )
-  .delete(
-    jwtValidationMiddleware,
-    authorizationMiddleware('admin'),
-    userController.deleteUser
-  );
+  .delete(authorizationMiddleware('admin'), userController.deleteUser);
 
 router
   .route('/:id/reviews')
-  .post(
-    jwtValidationMiddleware,
-    authorizationMiddleware('user'),
-    reviewController.createReview
-  );
+  .post(authorizationMiddleware('user'), reviewController.createReview);
 
 module.exports = router;
