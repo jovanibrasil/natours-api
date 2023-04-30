@@ -5,7 +5,7 @@ const userController = require('../controllers/userController');
 const reviewController = require('../controllers/reviewController');
 const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
 const authorizationMiddleware = require('../../utils/authorizationMiddleware');
-const userImageMiddleware = require('../../utils/userImageMiddleware');
+const imageUploadMiddleware = require('../../utils/imageUploadMiddleware');
 const resizeImageMiddleware = require('../../utils/resizeImageMiddleware');
 
 router.use(jwtValidationMiddleware);
@@ -15,7 +15,7 @@ router
   .get(userController.getUser)
   .patch(
     authorizationMiddleware('user'),
-    userImageMiddleware,
+    imageUploadMiddleware({ type: 'single', fieldName: 'photo' }),
     resizeImageMiddleware,
     userController.patchUser
   )
