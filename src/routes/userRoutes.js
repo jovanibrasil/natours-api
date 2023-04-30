@@ -5,7 +5,7 @@ const userController = require('../controllers/userController');
 const reviewController = require('../controllers/reviewController');
 const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
 const authorizationMiddleware = require('../../utils/authorizationMiddleware');
-const imageMiddleware = require('../../utils/userImageMiddleware');
+const userImageMiddleware = require('../../utils/userImageMiddleware');
 
 router.use(jwtValidationMiddleware);
 
@@ -14,7 +14,7 @@ router
   .get(userController.getUser)
   .patch(
     authorizationMiddleware('user'),
-    imageMiddleware,
+    userImageMiddleware,
     userController.patchUser
   )
   .delete(authorizationMiddleware('admin'), userController.deleteUser);
