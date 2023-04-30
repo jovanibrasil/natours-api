@@ -6,6 +6,7 @@ const reviewController = require('../controllers/reviewController');
 const jwtValidationMiddleware = require('../../utils/jwtValidationMiddeware');
 const authorizationMiddleware = require('../../utils/authorizationMiddleware');
 const userImageMiddleware = require('../../utils/userImageMiddleware');
+const resizeImageMiddleware = require('../../utils/resizeImageMiddleware');
 
 router.use(jwtValidationMiddleware);
 
@@ -15,6 +16,7 @@ router
   .patch(
     authorizationMiddleware('user'),
     userImageMiddleware,
+    resizeImageMiddleware,
     userController.patchUser
   )
   .delete(authorizationMiddleware('admin'), userController.deleteUser);
