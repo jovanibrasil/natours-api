@@ -32,7 +32,7 @@ exports.patchUser = catchAsync(async (req, res, next) => {
 
   const updateUser = { name };
 
-  if (req.file) updateUser.photo = req.file.filename;
+  if (req.files) updateUser.photo = req.files.photo.filename;
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, updateUser, {
     new: true,

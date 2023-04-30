@@ -16,8 +16,4 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-module.exports = ({ type = 'single', fieldName, fields } = {}) => {
-  if (type === 'single') return upload.single(fieldName);
-
-  return upload.fields(fields);
-};
+module.exports = ({ fields }) => upload.fields(fields);
