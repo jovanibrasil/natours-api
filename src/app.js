@@ -11,9 +11,11 @@ const morgan = require('morgan');
 const userRoutes = require('./routes/userRoutes');
 const tourRoutes = require('./routes/tourRoutes');
 const authRoutes = require('./routes/authRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const errorHandlerMiddleware = require('../utils/errorHandleMiddleware');
 const AppError = require('../utils/AppError');
+const bookingController = require('./controllers/bookingController');
 
 const limiter = rateLimit({
   max: 100,
@@ -23,6 +25,12 @@ const limiter = rateLimit({
 
 app.use(helmet());
 app.use('/api', limiter);
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 app.use(morgan());
 
@@ -53,6 +61,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/bookingRoutes', bookingRoutes);
 
 app.all('*', (req, res, next) => {
   throw new AppError(
